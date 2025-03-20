@@ -1,0 +1,179 @@
+--- Q1
+
+select count(ProductID) as numProds
+from Production.Product
+
+--- Q2
+
+select count(ProductID) as numProds
+from Production.Product
+where ProductSubcategoryID is not null
+
+--- Q3
+
+select ProductSubcategoryID, count(ProductID) as CountedProducts
+from Production.Product
+where ProductSubcategoryID is not null
+group by ProductSubcategoryID
+
+--- Q4
+
+select count(ProductID) as numProds
+from Production.Product
+where ProductSubcategoryID is null
+
+--- Q5
+
+select ProductID, sum(Quantity) as sum_quantity
+from Production.ProductInventory
+group by ProductID
+
+--- Q6
+
+select ProductID, sum(Quantity) as TheSum
+from Production.ProductInventory
+where LocationID = 40
+group by ProductID
+having sum(Quantity)<100
+
+--- Q7
+
+select Shelf, ProductID, sum(Quantity) as TheSum
+from Production.ProductInventory
+where LocationID = 40
+group by Shelf, ProductID
+having sum(Quantity)<100
+
+--- Q8
+
+select avg(Quantity) as TheAvg
+from Production.ProductInventory
+where LocationID = 10
+
+--- Q9
+
+select Shelf, ProductID, avg(Quantity) as TheAvg
+from Production.ProductInventory
+group by Shelf, ProductID
+
+--- Q10
+
+select Shelf, ProductID, avg(Quantity) as TheAvg
+from Production.ProductInventory
+where Shelf != 'N/A'
+group by Shelf, ProductID
+
+--- Q11
+
+select Color, Class, count(ProductID) as TheCount, avg(ListPrice) as AvgPrice
+from Production.Product
+where Color is not null and Class is not null
+group by Color, Class
+
+--- Q12
+
+select c.Name as Country, p.Name as Province
+from Person.CountryRegion c JOIN Person.StateProvince p
+on c.CountryRegionCode = p.CountryRegionCode
+
+--- Q13
+
+select c.Name as Country, p.Name as Province
+from Person.CountryRegion c JOIN Person.StateProvince p
+on c.CountryRegionCode = p.CountryRegionCode
+where c.Name in ('Germany', 'Canada')
+
+--- Q14
+
+select distinct p.ProductName
+from Orders o JOIN [Order Details] od on o.OrderID=od.OrderID
+JOIN Products p on od.ProductID=p.ProductID
+where o.OrderDate > '1998-01-01 00:00:00.000'
+
+--- Q15
+
+select TOP 5 ShipPostalCode, count(OrderID) as countorder
+from Orders
+where ShipPostalCode is not null
+group by ShipPostalCode
+order by countorder DESC
+
+--- Q16
+
+select TOP 5 ShipPostalCode, count(OrderID) as countorder
+from Orders
+where ShipPostalCode is not null
+and OrderDate > '1998-01-01 00:00:00.000'
+group by ShipPostalCode
+order by countorder DESC
+
+--- Q17
+
+select City, count(CustomerID) as numCustomers
+from Customers
+group by City
+
+--- Q18
+
+select City, count(CustomerID) as numCustomers
+from Customers
+group by City
+having count(CustomerID)>2
+
+--- Q19
+
+select c.ContactName, o.OrderDate
+from Orders o JOIN Customers c on o.CustomerID=c.CustomerID
+where o.OrderDate > '1998-01-01 00:00:00.000'
+
+--- Q20
+
+with ct1 as(
+select c.ContactName as ContactName, o.OrderDate, RANK() OVER(partition by c.ContactName order by o.OrderDate DESC) as RNK
+from Orders o JOIN Customers c on o.CustomerID=c.CustomerID)
+select ContactName, OrderDate 
+from ct1
+where RNK=1
+
+--- Q21
+
+select c.ContactName, count(od.ProductID) as countProds
+from Customers c JOIN Orders o on o.CustomerID=c.CustomerID 
+JOIN [Order Details] od on o.OrderID=od.OrderID
+group by c.ContactName
+
+--- Q22
+
+select c.CustomerID, count(od.ProductID) as countProds
+from Customers c JOIN Orders o on o.CustomerID=c.CustomerID 
+JOIN [Order Details] od on o.OrderID=od.OrderID
+group by c.CustomerID
+having count(od.ProductID)>100
+
+--- Q23
+
+select p.CompanyName as [Supplier Company Name], s.CompanyName as [Shipping Company Name]
+from Suppliers p Cross Join Shippers s
+
+--- Q24 - did not understand the question
+
+--- Q25
+
+select e1.FirstName + ' ' + e1.LastName as E1FullName, e2.FirstName + ' ' + e2.LastName as E2FullName
+from Employees e1 cross join Employees e2
+where e1.Title=e2.Title and e1.EmployeeID != e2.EmployeeID and e1.EmployeeID < e2.EmployeeID
+
+--- Q26
+
+select e2.FirstName + ' ' + e2.LastName as Manager, count(e1.EmployeeID) as numReports
+from Employees e1 join Employees e2 on e1.ReportsTo=e2.EmployeeID
+group by e1.ReportsTo, e2.FirstName, e2.LastName
+having count(e1.EmployeeID)>2
+
+--- Q27
+
+select City, CompanyName AS Name, ContactName, 'Customer' as Type
+from Customers
+UNION
+select City, CompanyName AS Name, ContactName, 'Supplier' as Type
+from Suppliers
