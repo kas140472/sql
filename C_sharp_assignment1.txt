@@ -1,0 +1,43 @@
+1. 
+A person's telephone number: string
+A person's height: float/double
+A person's age: int
+A person's gender: enum
+A person's salary: decimal
+A book's ISBN: string
+A book's price: decimal
+A book's shipping weight: float/double
+A country's population: long
+The number of stars in the universe: ulong
+Number of employees in UK businesses: int
+
+2. Value types store actual data directly, reference types store a reference to data. Boxing is converting a value type to an object type, unboxing is converting back.
+
+3. Managed resources are controlled by .NET runtime, unmanaged resources are not and require manual cleanup.
+
+4. The Garbage Collector automatically frees memory that is no longer in use by the program, preventing memory leaks and improving application performance.
+
+Controlling Flow and Converting Types
+
+1. Dividing an int by 0 throws a DivideByZeroException.
+
+2. Dividing a double by 0 results in Infinity or NaN (Not a Number).
+
+3. When an int overflows, it wraps around to the minimum negative value.
+
+4. x = y++ assigns the current value of y to x, then increments y; x = ++y increments y first, then assigns the new value to x.
+
+5. 
+- break: Exits the entire loop
+- continue: Skips the rest of the current iteration and moves to the next
+- return: Exits the entire method containing the loop
+
+6. The three parts are: initialization, condition, and iteration. Only the condition is required.
+
+7. = is an assignment operator, == is a comparison operator that checks equality.
+
+8. Yes, this statement compiles. It's an infinite loop.
+
+9. The underscore _ represents the default case in a switch expression.
+
+10. An object must implement the IEnumerable interface to be used with foreach.
